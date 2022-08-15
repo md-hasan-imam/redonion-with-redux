@@ -1,29 +1,59 @@
 import React from 'react';
 import { useForm } from "react-hook-form";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, useLocation} from 'react-router-dom';
 import headerLogo from '../../assets/images/logo2.png';
+import auth from '../../firebase.init';
+import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth';
+import Loading from '../../components/Loading';
 
 const Signup = () => {
 
-    const { register, handleSubmit, formState: { errors } } = useForm();
+    const { register, handleSubmit, formState: { errors } } = useForm({
+        mode: "onBlur"
+    });
 
-    const onSubmit = data => {
-        console.log(data);
+    const [
+        createUserWithEmailAndPassword,
+        user,
+        loading,
+        error,
+      ] = useCreateUserWithEmailAndPassword(auth);
+
+      let signUpError;
+      const navigate = useNavigate();
+      const location = useLocation();
+      let from = location.state?.from?.pathname || "/";
+
+      if (error) {
+        signUpError = <p className='text-red text-xs mt-3 mb-2 ml-2'>{error.message}</p>
     }
 
+      if (loading) {
+        return <Loading></Loading>;
+      }
+
+      if (user) {
+       navigate(from,{replace:true});
+      }
+
+    const onSubmit = data => {
+        const {email, password} = data;
+        console.log(email,password);
+        createUserWithEmailAndPassword(email, password);
+    }
 
     return (
         <div className='sign-in-container flex justify-center items-center '>
-            <div className='w-[30rem] mx-auto rounded-xl bg-white px-10'>
-                <div className="header-logo w-64 mx-auto pt-10 pb-12"  >
+            <div className='w-[35rem] mx-auto rounded-xl bg-white px-10'>
+                <div className="header-logo w-64 mx-auto pt-10 pb-16"  >
                     <Link to="/" ><img src={headerLogo} alt="" className='w-100' /></Link>
 
                 </div>
                 <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col '>
                 <input
                         type='name'
-                        placeholder='Your name'
-                        className='outline-none rounded p-4 mb-1 bg-light-gray text-xl'
+                        placeholder='Name'
+                        className=' text-xl outline-none rounded p-4 mb-1 bg-light-gray'
                         {...register("name",
                             {
                                 required: {
@@ -36,7 +66,7 @@ const Signup = () => {
                     </label>
                     <input
                         type='email'
-                        placeholder='Your email'
+                        placeholder='Email'
                         className='text-xl outline-none rounded p-4 mb-1 bg-light-gray '
                         {...register("email",
                             {
@@ -51,7 +81,7 @@ const Signup = () => {
 
                     <input
                         type="password"
-                        placeholder='Your password'
+                        placeholder='Password'
                         className='text-xl outline-none rounded p-4 mb-1 bg-light-gray'
                         {...register("password",
                             {
@@ -70,7 +100,10 @@ const Signup = () => {
                         {errors.password?.type === 'pattern' && <span className='text-xs text-red'>{errors.password.message}</span>}
                     </label>
 
-                    <input type="submit" value='Sign up' className= 'text-xl text-white p-4 my-4 rounded  bg-red ' />
+                    {/* sign up error message will show here */}
+                    {signUpError}
+
+                    <input type="submit" value='Sign up' className= 'text-xl text-white p-4 mb-3 rounded  bg-red ' />
 
                 </form>
 
