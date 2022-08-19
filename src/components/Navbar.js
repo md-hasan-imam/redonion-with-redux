@@ -6,9 +6,8 @@ import headerLogo from '../assets/images/logo2.png';
 const Navbar = () => {
 
 
-
     return (
-        <header className='sm:px-2 md:px-16 mb-10'>
+        <header className='navbar sm:px-2 md:px-16 mb-10'>
             <nav className='bg-green-500 flex justify-between items-center my-5 '>
                 <div className="header-logo w-48"  >
                     <img src={headerLogo} alt="" className='w-100' />
@@ -16,7 +15,7 @@ const Navbar = () => {
                 <div className='sm:hidden md:block'>
                     <ul className='sm:text-lg md:text-xl font-semibold sm:block' >
                         <Link to='/home' className='mr-10'>Home</Link>
-                        <Link to='/foods' className='mr-10'>Foods</Link>
+                        <Link to='/menuitems' className='mr-10'>Menu</Link>
                         <Link to='/cart' className='mr-10'>Cart</Link>
                         <Link to='/signin' className='mr-10'>Sign in</Link>
                         <Link to='/signup' className=''><button className="rounded-full bg-red text-white px-7 py-2">Sign up</button></Link>
