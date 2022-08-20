@@ -17,9 +17,8 @@ const Checkout = () => {
     }, [])
 
     const handleAddToCart = id => {
-        console.log('added')
+        
     }
-
 
     return (
         <div>
@@ -32,7 +31,7 @@ const Checkout = () => {
                             <p className='text-md my-8 leading-8'>{description}</p>
                             <div className='flex justify-center items-center mt-8 mb-5'>
                                 <h5 className='text-4xl font-semibold'>${price}</h5>
-                                <div className='ml-6 text-xl border-2 border-solid border-black py-2 px-4 rounded-full'>
+                                <div className='ml-6 text-xl border-2 border-solid border-gray py-2 px-4 rounded-full'>
                                     <button>-</button>
                                     <h4 className=' mx-5 inline-block'>{quantity}</h4>
                                     <button>+</button>
@@ -43,7 +42,6 @@ const Checkout = () => {
                         <div className='mt-10'>
                             <h5 className='text-5xl'>food slider</h5>
                         </div>
-
                     </div>
                 </div>
                 <div className='sm:w-full md:w-2/3 lg:w-2/5 mx-auto '>

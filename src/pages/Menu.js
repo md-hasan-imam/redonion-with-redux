@@ -3,27 +3,33 @@ import { useEffect } from 'react';
 import FoodItem from '../components/FoodItem';
 import Navbar from "../components/Navbar";
 
+
 const Menu = () => {
 
     const [menuItems, setMenuItems] = useState([]);
+    const [category, setCategory] = useState('');
+    const [searchedtext,setSearchedText] =useState('');
+    const [filteredResult,setFilteredResult] =useState([]);
+
 
     useEffect(() => {
         const url = 'http://localhost:5000/menuitems'
         fetch(url)
             .then(res => res.json())
             .then(data => setMenuItems(data))
-    }, [])
+    }, [category,searchedtext])
 
     const handleCategory= e =>{
-        const selectedCategory = e.target.value;
-        const matchedFoods = menuItems.filter((food)=> food.category === selectedCategory);
-        setMenuItems(matchedFoods);
+        setCategory(e.target.value.toLowerCase());
+        const matchedFoods = menuItems.filter((food)=>  food.keyIngredients.toLowerCase() === e.target.value.toLowerCase());
+        setFilteredResult(matchedFoods);
     };
 
     const handleSearchedFood= e =>{
-        const searchedText = e.target.value;
-        const matchedFoods = menuItems.map((food)=> food.name.icludes(searchedText));
-        setMenuItems(matchedFoods);
+        setSearchedText(e.target.value.toLowerCase());
+        const matchedFoods = menuItems.filter((food)=> food.keyIngredients.toLowerCase().includes(searchedtext) || food.name.toLowerCase().includes(searchedtext) || food.category.toLowerCase().includes(searchedtext));
+        console.log(matchedFoods)
+        setFilteredResult(matchedFoods);
     }
 
 
@@ -34,7 +40,8 @@ const Menu = () => {
                 {/* filter container */}
                 <hr />
                 <div className='sm:block md:flex justify-between my-10'>
-                    <h3 className='text-5xl font-semibold'>{menuItems.length} Foods</h3>
+                    <h3 className='text-5xl font-semibold'>
+                        { filteredResult.length > 0 ?  filteredResult.length :menuItems.length} Foods</h3>
                     <div className='sm:block lg:flex gap-y-3'>
                         <div className='flex'>
                             <div className=' h-10 w-10 bg-red flex items-center justify-center rounded-full mr-2'>
@@ -46,7 +53,7 @@ const Menu = () => {
 
                         <button className='block text-xl px-7 py-2 '>Cost: Low to High</button>
                         <button className='block text-xl px-7 py-2'>Cost: High to Low</button>
-                        <select name="category" id="category" className='text-xl' onChange={handleCategory}>
+                        <select name="category" id="category" className='text-xl' onChange={handleCategory }>
                             <option value="" disabled selected >Select a Category</option>
                             <option value="chicken">Chicken</option>
                             <option value="eggs">Eggs</option>
@@ -60,7 +67,11 @@ const Menu = () => {
 
                 {/* foods container */}
                 <div className='grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4  md:gap-10 sm:gap-5 ' >
-                    {menuItems.map(item => <FoodItem item={item} key={item.id}></FoodItem>)}
+                    {filteredResult.length > 0 ? 
+                    filteredResult.map(item => <FoodItem item={item} key={item.id}></FoodItem>)
+                    :
+                    menuItems.map(item => <FoodItem item={item} key={item.id}></FoodItem>)}
+
                 </div>
             </div>
         </div>

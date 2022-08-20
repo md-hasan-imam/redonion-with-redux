@@ -6,6 +6,8 @@ import Home from "./pages/Home";
 import SignIn from "./pages/Login/SignIn";
 import Signup from "./pages/Login/Signup";
 import Menu from "./pages/Menu";
+import Cart from "./pages/Cart";
+
 
 
 
@@ -19,6 +21,8 @@ function App() {
           <Route path="/signup" element={<Signup />} />
           <Route path="/menuitems" element={<Menu />}></Route>
           <Route path="/checkout/:id" element={<Checkout />}></Route>
+          <Route path="/cart" element={<Cart></Cart>}></Route>
+
         </Routes>
     </div>
   );
